@@ -1,35 +1,78 @@
-*.py[cod]
+import texttable # it is third party module 
 
-# C extensions
-*.so
+class Lc:
+    d={50:8,100:5,200:4,500:3,1000:3,2000:3}
+    he=['container_size_in_ltrs','qty']
+    def inventory(self):
+        """ This funtion displays current inventary
+        """
+        d1=self.d
+        l1=d1.keys()
+        l1.sort()
+  li=[]
+	ls=[]
+	for i in l1:
+	    li=[]
+	    li.append(i)
+	    li.append(d1[i])
+	    ls.append(li)
+	table=texttable.Texttable()
+	table.header(self.he)
+	table.add_rows(ls,header=False)
+	print table.draw()
 
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
+    def add_inv(self,k,v):
+        """ This methog takes two arguments 1 is no of containers to add to inventory and 2nd argument for 
+            size of the container
+        """
+	for i,j in (self.d).items():
+	    if k==i:
+                self.d[k]=self.d[k]+v
+        return self.d
 
-# Installer logs
-pip-log.txt
+    d1={'liquidx':{50:4,100:3,500:2,1000:1,2000:2},'petrole':{50:4,100:2,500:1,1000:2,2000:1}}
 
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
+    def s_req(self,lt,nl):
+        """ This method takes exactly 2 arguments 1st argument takes liquid type (liquidX,petrole...etc) to check weather 
+            liquid is avaialble or not
+            2nd argument takes no of liters to place order
+        """
+        d=self.d1
+#        import pdb;pdb.set_trace()
+        if lt not in d.keys():
+            print lt," type is not there in inventory"
+            return
+        for k,v in d.items():
+            if k==lt:
+                c=0
+                for i,j in v.items():
+                    a=i*j
+                    c=c+a
+                    if nl<=a:
+                        print k,"-",j,",",i,"liter contaiiner"
+        print "total capacity of liquid is",c
+        if nl<c:
+            print "enough inventory is there to place order"
+        else:
+            print "not enough inventory for ",k
+    
+if __name__ == "__main__":        
+    z=Lc()
 
-# Translations
-*.mo
+    try:
+        n=int(raw_input("Choose what do u want do\nEnter\n 1.Current inventory\n 2.Add inventory to current inventory\n 3.check availability for placing order\n"))
+    except ValueError,TypeError:
+        print "Enter a number 1 or 2 or 3"
+    if n==1:
+        z.inventory()
+    elif n==2:
+        v=int(raw_input("Enter how many containers do want to add :\n"))
+        k=int(raw_input("Enter size of container :\n"))
+        z.add_inv(k,v)
+        z.inventory()
+    elif n==3:
+        lt=raw_input("Enter liquid name u want place order\n")
+        nl=int(raw_input("Enter how many liters do u want to place order\n"))
+        z.s_req(lt,nl)    
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+
